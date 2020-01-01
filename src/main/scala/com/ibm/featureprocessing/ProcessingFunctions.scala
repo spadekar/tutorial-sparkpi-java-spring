@@ -155,10 +155,10 @@ class ProcessingFunctions {
       if(attrEntry.getString("dbtype") == "mongodb"){
         mongoDS.put(attrEntry)
         mongoTables += attrEntry.getString("table")
-      } else if((attrEntry.getString("dbtype") == "mariadb"){
+      } else if(attrEntry.getString("dbtype") == "mariadb"){
         mariaDS.put(attrEntry)
         mariaTables += attrEntry.getString("table")
-      } else if((attrEntry.getString("dbtype") == "snowflakedb"){
+      } else if(attrEntry.getString("dbtype") == "snowflakedb"){
         snowflakeDS.put(attrEntry)
         snowflakeTables += attrEntry.getString("table")
       }
