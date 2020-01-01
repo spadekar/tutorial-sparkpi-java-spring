@@ -83,6 +83,11 @@
             <artifactId>janino</artifactId>
             <version>3.0.8</version>
         </dependency>
+		<dependency>
+            <groupId>net.snowflake</groupId>
+            <artifactId>snowflake-jdbc</artifactId>
+            <version>3.11.0</version>
+        </dependency>
     </dependencies>
     <dependencyManagement>
         <dependencies>
