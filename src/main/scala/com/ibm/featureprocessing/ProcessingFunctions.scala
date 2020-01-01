@@ -16,10 +16,10 @@ class ProcessingFunctions {
 
   def getMongoData(spark: SparkSession,database:String,collection:String,columns:Array[String]): DataFrame ={
     //Changes for local setup
-	val uri: String = s"mongodb://mongouser:mongouser@mongodb/${database}.${collection}"
+    val uri: String = s"mongodb://mongouser:mongouser@mongodb/${database}.${collection}"
     //val uri: String = s"mongodb://mongouser:mongouser@127.0.0.1:34000/${database}.${collection}"
-	
-  val customReadConfig = ReadConfig(
+
+    val customReadConfig = ReadConfig(
       Map("uri" -> uri)
     )
 
@@ -32,13 +32,13 @@ class ProcessingFunctions {
 
   def getMariaData(spark: SparkSession,database:String,tableName:String,columns:Array[String]): DataFrame ={
     //Changes for local setup
-	val jdbcHostname = "mysql"
+    val jdbcHostname = "mysql"
     val jdbcPort = 3306
     //val jdbcHostname = "127.0.0.1"
     //val jdbcPort = 34006
 
     val jdbcDatabase = database
-	
+
     val jdbcUsername = "mysql"
     val jdbcPassword = "mysql"
 
@@ -51,7 +51,7 @@ class ProcessingFunctions {
 
     connectionProperties.put("user", s"${jdbcUsername}")
     connectionProperties.put("password", s"${jdbcPassword}")
-	connectionProperties.put("driver", "com.mysql.cj.jdbc.Driver")
+    connectionProperties.put("driver", "com.mysql.cj.jdbc.Driver")
     val dfRead = spark.read.jdbc(jdbcUrl, tableName, connectionProperties)
     val result = dfRead.select(columns.head, columns.tail: _*)
     result
@@ -61,35 +61,35 @@ class ProcessingFunctions {
     //Changes for local setup
     val uri: String = s"mongodb://mongouser:mongouser@mongodb/${database}.${collection}"
     //val uri: String = s"mongodb://mongouser:mongouser@127.0.0.1:34000/${database}.${collection}"
-	val customReadConfig = ReadConfig(
+    val customReadConfig = ReadConfig(
       Map("uri" -> uri)
     )
 
     //val dfRead = spark.read.format("mongo").option("uri", uri).load()
     val dfRead = spark.read.format("mongo").options(customReadConfig.asOptions).load()
-	
+
     dfRead.createOrReplaceTempView(collection)
     val result = spark.sql(sql)
     result
   }
-  
-    def getSnowflakeDataFromSQL(spark: SparkSession,database:String,table:String,sql:String): DataFrame ={
-		val jdbcUrl = s"jdbc:snowflake://uy65137.us-central1.gcp.snowflakecomputing.com/"
-		
-		// Create a Properties() object to hold the parameters.
-		import java.util.Properties
-		val connectionProperties = new Properties()
-		
-		connectionProperties.put("user", "vikrambhosle")
-		connectionProperties.put("password", "Vikyman7")
-		//connectionProperties.put("account", "vikrambhosle");  // replace "" with your account name
-		connectionProperties.put("db", "sampledb");       // replace "" with target database name
-		connectionProperties.put("schema", "public");   // replace "" with target schema name
-		connectionProperties.put("driver", "net.snowflake.client.jdbc.SnowflakeDriver")
-		val dfRead = spark.read.jdbc(jdbcUrl, tableName, connectionProperties)
-		dfRead.createOrReplaceTempView(collection)
-		val result = spark.sql(sql)
-		result
+
+  def getSnowflakeDataFromSQL(spark: SparkSession,database:String,tableName:String,sql:String): DataFrame ={
+    val jdbcUrl = s"jdbc:snowflake://uy65137.us-central1.gcp.snowflakecomputing.com/"
+
+    // Create a Properties() object to hold the parameters.
+    import java.util.Properties
+    val connectionProperties = new Properties()
+
+    connectionProperties.put("user", "vikrambhosle")
+    connectionProperties.put("password", "Vikyman7")
+    //connectionProperties.put("account", "vikrambhosle");  // replace "" with your account name
+    connectionProperties.put("db", "sampledb");       // replace "" with target database name
+    connectionProperties.put("schema", "public");   // replace "" with target schema name
+    connectionProperties.put("driver", "net.snowflake.client.jdbc.SnowflakeDriver")
+    val dfRead = spark.read.jdbc(jdbcUrl, tableName, connectionProperties)
+    dfRead.createOrReplaceTempView(tableName)
+    val result = spark.sql(sql)
+    result
   }
 
   def getMariaDataFromSQL(spark: SparkSession,database:String,tableName:String,sql:String): DataFrame ={
@@ -112,8 +112,8 @@ class ProcessingFunctions {
 
     connectionProperties.put("user", s"${jdbcUsername}")
     connectionProperties.put("password", s"${jdbcPassword}")
-	connectionProperties.put("driver", "com.mysql.cj.jdbc.Driver")
-	
+    connectionProperties.put("driver", "com.mysql.cj.jdbc.Driver")
+
     val dfRead = spark.read.jdbc(jdbcUrl, tableName, connectionProperties)
     dfRead.createOrReplaceTempView(tableName)
     val result = spark.sql(sql)
@@ -124,7 +124,7 @@ class ProcessingFunctions {
     import spark.implicits._
     var dfMaria= spark.emptyDataFrame
     var dfMongo= spark.emptyDataFrame
-	var dfSnowflake= spark.emptyDataFrame
+    var dfSnowflake= spark.emptyDataFrame
     val processingFunctions = new ProcessingFunctions()
     //val inputJson:String = "{'attributes':[{'desc':'Spend Amount','dbtype':'mongodb','table':'cards','column':'Spend_Amount','colT4mtn':'NA'},{'desc':'CustomerIdentifier','dbtype':'mongodb','table':'cards','column':'Customer_ID','colT4mtn':'NA'},{'desc':'CustomerIdentifier','dbtype':'mariadb','table':'demographics','column':'Customer_ID','colT4mtn':'NA'},{'desc':'BusinessDate','dbtype':'mongodb','table':'cards','column':'Business_Date','colT4mtn':'NA'},{'desc':'CardType','dbtype':'mongodb','table':'cards','column':'Card_Type','colT4mtn':'NA'},{'desc':'PaidAmount','dbtype':'mongodb','table':'cards','column':'Paid_Amount','colT4mtn':'NA'},{'desc':'DateofBirth','dbtype':'mariadb','table':'demographics','column':'DOB','colT4mtn':'NA'},{'desc':'MaritalStatus','dbtype':'mariadb','table':'demographics','column':'Marital_Status','colT4mtn':'NA'},{'desc':'PostalCode','dbtype':'mariadb','table':'demographics','column':'Postal_Code','colT4mtn':'NA'},{'desc':'SelfEmployedorNot','dbtype':'mariadb','table':'demographics','column':'Self_Employed','colT4mtn':'NA'}],'transformations':[{'DST4mtn':'RollingWindow','params':'(Spend_Amount,10,Customer_ID,Business_Date)','colName':'Calculated_Carry_Over_Amt'}],'datasetname':'sample'}"
 
@@ -137,12 +137,13 @@ class ProcessingFunctions {
 
     var mongoDatasets = new ArrayBuffer[Dataset[Row]]()
     var mariaDatasets = new ArrayBuffer[Dataset[Row]]()
+    var snowflakeDatasets = new ArrayBuffer[Dataset[Row]]()
 
     var mariaDS = new JSONArray()
     var mariaTables = mutable.Set[String]()
     var mariaQueries = scala.collection.mutable.Map[String, String]()
-	
-	var snowflakeDS = new JSONArray()
+
+    var snowflakeDS = new JSONArray()
     var snowflakeTables = mutable.Set[String]()
     var snowflakeQueries = scala.collection.mutable.Map[String, String]()
 
@@ -212,8 +213,8 @@ class ProcessingFunctions {
       mariaQueries(tableName) = "select " + selectColumns + " from " + tableName
       println(mariaQueries)
     }
-	
-	for(tableName <- snowflakeTables){
+
+    for(tableName <- snowflakeTables){
       var selectColumns = ""
       println(tableName)
       var firstEle:Boolean = true
@@ -237,8 +238,8 @@ class ProcessingFunctions {
       snowflakeQueries(tableName) = "select " + selectColumns + " from " + tableName
       println(snowflakeQueries)
     }
-	
-	
+
+
     for( (tableName,sql) <- mongoQueries){
       mongoDatasets += processingFunctions.getMongoDataFromSQL(spark,"sampledb",tableName,sql)
     }
@@ -249,8 +250,8 @@ class ProcessingFunctions {
 
     for( (tableName,sql) <- snowflakeQueries){
       snowflakeDatasets += processingFunctions.getSnowflakeDataFromSQL(spark,"sampledb",tableName,sql)
-    }	
-	
+    }
+
     if(mongoDatasets.length > 0){
       dfMongo = mongoDatasets(0)
       var i=1
@@ -259,7 +260,7 @@ class ProcessingFunctions {
         i+1
       }
     }
-	
+
     if(mariaDatasets.length > 0){
       dfMaria = mariaDatasets(0)
       var i=1
@@ -268,8 +269,8 @@ class ProcessingFunctions {
         i+1
       }
     }
-	
-	if(snowflakeDatasets.length > 0){
+
+    if(snowflakeDatasets.length > 0){
       dfSnowflake = snowflakeDatasets(0)
       var i=1
       while(i <= (snowflakeDatasets.length - 1) ){
@@ -277,38 +278,38 @@ class ProcessingFunctions {
         i+1
       }
     }
-	
+
     dfMongo.printSchema()
     dfMaria.printSchema()
-	dfSnowflake.printSchema()
-	
+    dfSnowflake.printSchema()
+
     var resulSet = spark.emptyDataFrame
     if(mongoDatasets.length == 0){
-		if(mariaDatasets.length == 0){
-			if(snowflakeDatasets.length == 0){
-				resulSet = dfSnowflake
-			} else {
-				resulSet = dfSnowflake
-			}		
-		} else {
-			if(snowflakeDatasets.length == 0){
-				resulSet = dfMaria
-			} else {
-				resulSet = snowflakeDatasets.join(dfMaria,"Customer_ID")
-			}					
-		}
+      if(mariaDatasets.length == 0){
+        if(snowflakeDatasets.length == 0){
+          resulSet = dfSnowflake
+        } else {
+          resulSet = dfSnowflake
+        }
+      } else {
+        if(snowflakeDatasets.length == 0){
+          resulSet = dfMaria
+        } else {
+          resulSet = dfSnowflake.join(dfMaria,"Customer_ID")
+        }
+      }
     } else if(mariaDatasets.length == 0) {
-		if(snowflakeDatasets.length == 0){
-			resulSet = dfMongo
-		} else {
-			resulSet = dfSnowflake.join(dfMongo,"Customer_ID")
-		}	
+      if(snowflakeDatasets.length == 0){
+        resulSet = dfMongo
+      } else {
+        resulSet = dfSnowflake.join(dfMongo,"Customer_ID")
+      }
     } else if(snowflakeDatasets.length == 0) {
-		resulSet = dfMaria
-	} else {
-		resulSet = dfSnowflake.join(dfMongo,"Customer_ID").join(dfMaria,"Customer_ID")
-	}
-	
+      resulSet = dfMaria
+    } else {
+      resulSet = dfSnowflake.join(dfMongo,"Customer_ID").join(dfMaria,"Customer_ID")
+    }
+
     resulSet.show()
     var resulSetTemp = spark.emptyDataFrame
     import spark.implicits._
@@ -334,11 +335,11 @@ class ProcessingFunctions {
     val resulSetFinal = resulSetTemp.withColumn("refresh_date",current_timestamp)
     println("final schema")
     resulSetFinal.printSchema()
-	
-	//change for local
+
+    //change for local
     //resulSetFinal.write.option("uri", "mongodb://mongouser:mongouser@127.0.0.1:34000/sampledb").option("collection", "output_coll").format("mongo").mode(SaveMode.Append).save()
-	resulSetFinal.write.option("uri", "mongodb://mongouser:mongouser@mongodb/sampledb").option("collection", "output_coll").format("mongo").mode(SaveMode.Append).save()
-	
+    resulSetFinal.write.option("uri", "mongodb://mongouser:mongouser@mongodb/sampledb").option("collection", "output_coll").format("mongo").mode(SaveMode.Append).save()
+
     return s"Resultset is uploaded in collection 'output_coll'"
   }
 
