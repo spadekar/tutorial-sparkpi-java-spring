@@ -298,17 +298,21 @@ class ProcessingFunctions {
           resulSet = dfSnowflake.join(dfMaria,"Customer_ID")
         }
       }
-    } else if(mariaDatasets.length == 0) {
-      if(snowflakeDatasets.length == 0){
-        resulSet = dfMongo
-      } else {
-        resulSet = dfSnowflake.join(dfMongo,"Customer_ID")
-      }
-    } else if(snowflakeDatasets.length == 0) {
-      resulSet = dfMaria
     } else {
-      resulSet = dfSnowflake.join(dfMongo,"Customer_ID").join(dfMaria,"Customer_ID")
-    }
+		if(mariaDatasets.length == 0) {
+			if(snowflakeDatasets.length == 0){
+				resulSet = dfMongo
+			} else {
+				resulSet = dfSnowflake.join(dfMongo,"Customer_ID")
+			}
+		} else {
+			if(snowflakeDatasets.length == 0) {
+				resulSet = dfMaria.join(dfMongo,"Customer_ID")
+			} else {
+				resulSet = dfSnowflake.join(dfMongo,"Customer_ID").join(dfMaria,"Customer_ID")
+			}
+		}
+	}
 
     resulSet.show()
     var resulSetTemp = spark.emptyDataFrame
@@ -337,8 +341,8 @@ class ProcessingFunctions {
     resulSetFinal.printSchema()
 
     //change for local
-    //resulSetFinal.write.option("uri", "mongodb://mongouser:mongouser@127.0.0.1:34000/sampledb").option("collection", "output_coll").format("mongo").mode(SaveMode.Append).save()
-    resulSetFinal.write.option("uri", "mongodb://mongouser:mongouser@mongodb/sampledb").option("collection", "output_coll").format("mongo").mode(SaveMode.Append).save()
+    //resulSetFinal.write.option("uri", "mongodb://mongouser:mongouser@127.0.0.1:34000/sampledb").option("collection", "output_coll").format("mongo").mode(SaveMode.Overwrite).save()
+    resulSetFinal.write.option("uri", "mongodb://mongouser:mongouser@mongodb/sampledb").option("collection", "output_coll").format("mongo").mode(SaveMode.Overwrite).save()
 
     return s"Resultset is uploaded in collection 'output_coll'"
   }
