@@ -298,21 +298,17 @@ class ProcessingFunctions {
           resulSet = dfSnowflake.join(dfMaria,"Customer_ID")
         }
       }
+    } else if(mariaDatasets.length == 0) {
+      if(snowflakeDatasets.length == 0){
+        resulSet = dfMongo
+      } else {
+        resulSet = dfSnowflake.join(dfMongo,"Customer_ID")
+      }
+    } else if(snowflakeDatasets.length == 0) {
+      resulSet = dfMaria
     } else {
-		if(mariaDatasets.length == 0) {
-			if(snowflakeDatasets.length == 0){
-				resulSet = dfMongo
-			} else {
-				resulSet = dfSnowflake.join(dfMongo,"Customer_ID")
-			}
-		} else {
-			if(snowflakeDatasets.length == 0) {
-				resulSet = dfMaria.join(dfMongo,"Customer_ID")
-			} else {
-				resulSet = dfSnowflake.join(dfMongo,"Customer_ID").join(dfMaria,"Customer_ID")
-			}
-		}
-	}
+      resulSet = dfSnowflake.join(dfMongo,"Customer_ID").join(dfMaria,"Customer_ID")
+    }
 
     resulSet.show()
     var resulSetTemp = spark.emptyDataFrame
@@ -330,8 +326,15 @@ class ProcessingFunctions {
       val paramArray = params.replaceAll("[()]","").split(",")
       println(paramArray)
       if(transFunc == "RollingWindow"){
-        val windowSpec = Window.partitionBy(paramArray(2)).orderBy(paramArray(3)).rowsBetween((paramArray(1).toInt * -1),0)
-        resulSetTemp = resulSet.withColumn(colName,sum(resulSet(paramArray(0))).over(windowSpec))
+        val windowSpec = Window.partitionBy(paramArray(3)).orderBy(paramArray(4)).rowsBetween((paramArray(2).toInt * -1),0)
+        if(paramArray(1)=="sum")
+          resulSetTemp = resulSet.withColumn(colName,sum(resulSet(paramArray(1))).over(windowSpec))
+        else if(paramArray(1)=="max")
+          resulSetTemp = resulSet.withColumn(colName,max(resulSet(paramArray(1))).over(windowSpec))
+        else if(paramArray(1)=="min")
+          resulSetTemp = resulSet.withColumn(colName,min(resulSet(paramArray(1))).over(windowSpec))
+        else if(paramArray(1)=="mean")
+          resulSetTemp = resulSet.withColumn(colName,mean(resulSet(paramArray(1))).over(windowSpec))
         resulSetTemp.show()
       }
     }
@@ -341,8 +344,8 @@ class ProcessingFunctions {
     resulSetFinal.printSchema()
 
     //change for local
-    //resulSetFinal.write.option("uri", "mongodb://mongouser:mongouser@127.0.0.1:34000/sampledb").option("collection", "output_coll").format("mongo").mode(SaveMode.Overwrite).save()
-    resulSetFinal.write.option("uri", "mongodb://mongouser:mongouser@mongodb/sampledb").option("collection", "output_coll").format("mongo").mode(SaveMode.Overwrite).save()
+    //resulSetFinal.write.option("uri", "mongodb://mongouser:mongouser@127.0.0.1:34000/sampledb").option("collection", "output_coll").format("mongo").mode(SaveMode.Append).save()
+    resulSetFinal.write.option("uri", "mongodb://mongouser:mongouser@mongodb/sampledb").option("collection", "output_coll").format("mongo").mode(SaveMode.Append).save()
 
     return s"Resultset is uploaded in collection 'output_coll'"
   }

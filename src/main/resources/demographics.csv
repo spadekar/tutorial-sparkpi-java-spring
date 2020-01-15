@@ -1,0 +1,20 @@
+﻿Customer_ID,First_ Name,Middle_name,Last_Name,Date_of_Birth,SSN,Marital_Status,Phone,Present_Address,City,Postal_Code,Self_Employed,Employer,Employer_Address,City,Post_Code
+32453223,John,,Matthew,19-10-1994,3454325435,M,8023432423,324 1st Cross bensontown,Bangalore,560045,No,Goods Pracel services,24th main nagawara,Bangalore,560034
+32453224,Shiva,Singh,Jadon,12-08-1996,3454325436,S,9876543210,124 Rajat Vihar Mathura,Mathura,281001,No,IBM India Pvt Ltd,Sector 30 Silokhera,Gurgaon,122001
+32453226,Derek,,Baint,31-05-1995,3454325438,S,8023432423,11 1st Cross Liluah,Howrah,700112,Yes,National Varieties,11 1st Cross Liluah,Kolkata,700123
+32453227,Deepak,,Kalal,31-12-1989,3454325439,M,7012387345,Pulwama Jammu,Pulwama,192301,Yes,Insta Corp,Pulwama Jammu,Pulwama,192301
+32453228,Adit,,Gupta,21-04-1993,3454325440,D,8023432423,D8 Block Near Cyber Park,Delhi,110001,No,Audit Handling Ltd,23 New Street Bhopal,Bhopal,668099
+32453243,Akhandanand,,Trivedi,14-11-1980,3454325455,M,9012345678,Trivedi House,Mirzapur,231001,Yes,Kaleen Industries,Trivedi House,Mirzapur,231001
+32453229,Utkarsh,,Mishra,30-03-1995,3454325441,O,8902345614,Mishra Kesovr,Agra,201232,Yes,Orissa Innovations,Royal Bunglaw,Bhuvneshwar,222203
+32453230,Kartik,,Garg,22-12-1992,3454325442,S,9452387103,A54 Block A Sector 45,Meerut,453402,No,New India Developers,Cyber Park New Delhi,Delhi,110101
+32453231,Ashu,,Sharma,11-11-1995,3454325443,M,9876543210,34 Puja Gali,Delhi,110001,Yes,Pandit G Bhagyaoday,34 Puja Gali,Delhi,110101
+32453232,Ashutosh,S,Dwivedi,29-12-1980,3454325444,M,8902345614,Dwivedi Hestee,Noida,120321,Yes,Dwivedi Enterprises,Vaishali,Noida,120321
+32453233,Rebecca,,Smith,22-12-1992,3454325445,M,8023432423,324 1st Cross bensontown,Bangalore,120322,No,Goods Pracel services,24th main nagawara,Bangalore,120322
+32453234,Hemant,Kumar,Sindhi,14-11-1980,3454325446,S,8023432423,124 Rajat Vihar Mathura,Mathura,120323,Yes,Easyday Club,Sector 30 Silokhera,Gurgaon,120323
+32453235,Shivani,,Sharma,23-09-1989,3454325447,M,7012387345,11 1st Cross Liluah,Howrah,120324,No,IBM India Pvt Ltd,11 1st Cross Liluah,Kolkata,120324
+32453236,Mehuli,,Karmakar,30-05-1996,3454325448,D,7012387345,Pulwama Jammu,Pulwama,120325,Yes,Reliance Fresh,Pulwama Jammu,Pulwama,120325
+32453237,Ipsita,Rani,Banerjee,01-05-1986,3454325449,M,9876543210,D8 Block Near Cyber Park,Delhi,120326,No,New India Developers,23 New Street Bhopal,Bhopal,120326
+32453238,kanchan,,Nandwani,02-11-1978,3454325450,M,8902345614,Trivedi House,Mirzapur,120327,No,New India Developers,Trivedi House,Mirzapur,120327
+32453239,Alam,,Fakhre,31-08-1976,3454325451,S,9012345678,Mishra Kesovr,Agra,120328,No,New India Developers,Royal Bunglaw,Bhuvneshwar,120328
+32453240,Sayan,,Patra,24-04-1987,3454325452,D,8023432423,A54 Block A Sector 45,Meerut,120329,Yes,Usha Enterprise,Cyber Park New Delhi,Delhi,120329
+32453241,Rahul,,Pandey,20-05-1994,3454325453,M,9012345678,34 Puja Gali,Delhi,120330,No,Goods Pracel services,Cyber Park New Delhi,Delhi,120330
