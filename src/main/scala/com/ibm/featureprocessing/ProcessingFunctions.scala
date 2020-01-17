@@ -326,6 +326,10 @@ class ProcessingFunctions {
       val paramArray = params.replaceAll("[()]","").split(",")
       println(paramArray)
       if(transFunc == "RollingWindow"){
+        val windowSpec = Window.partitionBy(paramArray(2)).orderBy(paramArray(3)).rowsBetween((paramArray(1).toInt * -1),0)
+        resulSetTemp = resulSet.withColumn(colName,sum(resulSet(paramArray(0))).over(windowSpec))
+
+        /* code for future when multiple functions are allowed
         val windowSpec = Window.partitionBy(paramArray(3)).orderBy(paramArray(4)).rowsBetween((paramArray(2).toInt * -1),0)
         if(paramArray(1)=="sum")
           resulSetTemp = resulSet.withColumn(colName,sum(resulSet(paramArray(1))).over(windowSpec))
@@ -335,6 +339,7 @@ class ProcessingFunctions {
           resulSetTemp = resulSet.withColumn(colName,min(resulSet(paramArray(1))).over(windowSpec))
         else if(paramArray(1)=="mean")
           resulSetTemp = resulSet.withColumn(colName,mean(resulSet(paramArray(1))).over(windowSpec))
+         */
         resulSetTemp.show()
       }
     }
