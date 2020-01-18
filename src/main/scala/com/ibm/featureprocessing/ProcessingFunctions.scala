@@ -159,7 +159,7 @@ class ProcessingFunctions {
       } else if(attrEntry.getString("dbtype") == "mariadb"){
         mariaDS.put(attrEntry)
         mariaTables += attrEntry.getString("table")
-      } else if(attrEntry.getString("dbtype") == "snowflakedb"){
+      } else if(attrEntry.getString("dbtype") == "snowflake"){
         snowflakeDS.put(attrEntry)
         snowflakeTables += attrEntry.getString("table")
       }
@@ -315,19 +315,20 @@ class ProcessingFunctions {
     import spark.implicits._
     val transformationArray = jsonObject.getJSONArray("transformations")
     val transLen = transformationArray.length()
-    for (i <- 1 to transLen) {
-      val transformEntry = transformationArray.getJSONObject(i - 1)
-      val transFunc = transformEntry.getString("DST4mtn")
-      val colName = transformEntry.getString("colName")
-      val params = transformEntry.getString("params")
-      println(params)
-      println(transFunc)
-      println(colName)
-      val paramArray = params.replaceAll("[()]","").split(",")
-      println(paramArray)
-      if(transFunc == "RollingWindow"){
-        val windowSpec = Window.partitionBy(paramArray(2)).orderBy(paramArray(3)).rowsBetween((paramArray(1).toInt * -1),0)
-        resulSetTemp = resulSet.withColumn(colName,sum(resulSet(paramArray(0))).over(windowSpec))
+    if(transLen > 0) {
+      for (i <- 1 to transLen) {
+        val transformEntry = transformationArray.getJSONObject(i - 1)
+        val transFunc = transformEntry.getString("DST4mtn")
+        val colName = transformEntry.getString("colName")
+        val params = transformEntry.getString("params")
+        println(params)
+        println(transFunc)
+        println(colName)
+        val paramArray = params.replaceAll("[()]", "").split(",")
+        println(paramArray)
+        if (transFunc == "RollingWindow") {
+          val windowSpec = Window.partitionBy(paramArray(2)).orderBy(paramArray(3)).rowsBetween((paramArray(1).toInt * -1), 0)
+          resulSetTemp = resulSet.withColumn(colName, sum(resulSet(paramArray(0))).over(windowSpec))
 
         /* code for future when multiple functions are allowed
         val windowSpec = Window.partitionBy(paramArray(3)).orderBy(paramArray(4)).rowsBetween((paramArray(2).toInt * -1),0)
@@ -340,10 +341,13 @@ class ProcessingFunctions {
         else if(paramArray(1)=="mean")
           resulSetTemp = resulSet.withColumn(colName,mean(resulSet(paramArray(1))).over(windowSpec))
          */
-        resulSetTemp.show()
+          resulSetTemp.show()
+        }
       }
+      resulSetTemp.printSchema()
+    }else{
+      resulSetTemp = resulSet
     }
-    resulSetTemp.printSchema()
     val resulSetFinal = resulSetTemp.withColumn("refresh_date",current_timestamp)
     println("final schema")
     resulSetFinal.printSchema()
