@@ -156,10 +156,11 @@ class ProcessingFunctions {
       if(attrEntry.getString("dbtype") == "mongodb"){
         mongoDS.put(attrEntry)
         mongoTables += attrEntry.getString("table")
-      } else if(attrEntry.getString("dbtype") == "mariadb"){
+		// getString("dbtype") == "snowflakedb" code switched from mariadb due to POC implementation
+      } else if(attrEntry.getString("dbtype") == "snowflakedb"){
         mariaDS.put(attrEntry)
         mariaTables += attrEntry.getString("table")
-      } else if(attrEntry.getString("dbtype") == "snowflakedb"){
+      } else if(attrEntry.getString("dbtype") == "mariadb"){
         snowflakeDS.put(attrEntry)
         snowflakeTables += attrEntry.getString("table")
       }
@@ -349,8 +350,8 @@ class ProcessingFunctions {
     resulSetFinal.printSchema()
 
     //change for local
-    //resulSetFinal.write.option("uri", "mongodb://mongouser:mongouser@127.0.0.1:34000/sampledb").option("collection", "output_coll").format("mongo").mode(SaveMode.Append).save()
-    resulSetFinal.write.option("uri", "mongodb://mongouser:mongouser@mongodb/sampledb").option("collection", "output_coll").format("mongo").mode(SaveMode.Append).save()
+    //resulSetFinal.write.option("uri", "mongodb://mongouser:mongouser@127.0.0.1:34000/sampledb").option("collection", "output_coll").format("mongo").mode(SaveMode.Overwrite).save()
+    resulSetFinal.write.option("uri", "mongodb://mongouser:mongouser@mongodb/sampledb").option("collection", "output_coll").format("mongo").mode(SaveMode.Overwrite).save()
 
     return s"Resultset is uploaded in collection 'output_coll'"
   }
