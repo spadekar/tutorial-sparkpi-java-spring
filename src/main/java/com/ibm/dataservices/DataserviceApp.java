@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 //@RestController
 @SpringBootApplication
-//@ComponentScan("com")
+@ComponentScan("com")
 public class DataserviceApp {
 
     //@RequestMapping(value = "/", produces = MediaType.TEXT_HTML_VALUE)
